@@ -65,7 +65,7 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile",
     "lint": "eslint src --ext ts",
-    "test": "node --test \"test/**/*.js\""
+    "test": "node --test test/run-tests.js"
   },
   "devDependencies": {
     "@types/node": "16.x",
