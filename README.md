@@ -2,9 +2,11 @@
 
 Monitor your ChatGPT/Codex Stats and rate limits directly in VS Code's status bar.
 
+This fork is maintained at <https://github.com/128bitstudios/codex-stats>.
+
 ## Features
 
-- 📊 **Real-time Usage Display**: Shows your current rate limit usage percentage in the status bar
+- 📊 **Real-time Usage Display**: Shows the highest available rate limit usage percentage in the status bar
 - 👤 **Account Information**: Displays your email and plan type in the tooltip
 - ⏱️ **Auto-refresh**: Updates every 5 minutes (configurable)
 - ⚠️ **Usage Warnings**: Visual indicators when approaching rate limits
@@ -40,7 +42,7 @@ Hover over the status bar item to see a beautifully formatted panel with:
   - 🟢 Green circles for usage below 80%
   - 🟡 Yellow circles for usage 80-95%
   - 🔴 Red circles for usage above 95%
-- **Time-based limits**: 5-hour and 7-day windows
+- **Time-based limits**: Displays whichever Codex windows are currently returned, including short and weekly windows
 - **Smart reset timers**: Shows time remaining in human-readable format
 - **Icon indicators**: Clock for hourly, calendar for weekly limits
 
@@ -55,7 +57,7 @@ Hover over the status bar item to see a beautifully formatted panel with:
 ## Installation
 
 1. Clone this repository
-2. Open the `codex-usage` folder in VS Code
+2. Open the `codex-stats` folder in VS Code
 3. Run `npm install`
 4. Run `npm run compile`
 5. Press `F5` to launch a new VS Code window with the extension
@@ -65,9 +67,9 @@ Hover over the status bar item to see a beautifully formatted panel with:
 To create a `.vsix` file for installation:
 
 ```bash
-npm install -g vsce
-cd codex-usage
-vsce package
+npm install -g @vscode/vsce
+cd codex-stats
+npm run vscode:package
 ```
 
 Then install the generated `.vsix` file in VS Code.

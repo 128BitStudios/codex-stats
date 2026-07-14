@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import { CodexAPIClient } from '../codex-client'
-import { AuthData, RateLimits } from '../types'
+import { AuthData, RateLimits, RateLimitWindow } from '../types'
 import {
   updateStatusBar,
   showUpdating,
@@ -72,13 +72,13 @@ function checkRateLimitWarnings(rateLimits: RateLimits) {
 
   if (rateLimits.primary && rateLimits.primary.used_percent > 90) {
     warnings.push(
-      `5h limit is ${rateLimits.primary.used_percent.toFixed(1)}% used`,
+      `${formatLimitLabel(rateLimits.primary, 'Short window')} limit is ${rateLimits.primary.used_percent.toFixed(1)}% used`,
     )
   }
 
   if (rateLimits.secondary && rateLimits.secondary.used_percent > 90) {
     warnings.push(
-      `Weekly limit is ${rateLimits.secondary.used_percent.toFixed(1)}% used`,
+      `${formatLimitLabel(rateLimits.secondary, 'Weekly')} limit is ${rateLimits.secondary.used_percent.toFixed(1)}% used`,
     )
   }
 
@@ -87,6 +87,23 @@ function checkRateLimitWarnings(rateLimits: RateLimits) {
       `Codex Stats Warning: ${warnings.join(', ')}`,
     )
   }
+}
+
+function formatLimitLabel(
+  limit: RateLimitWindow,
+  fallbackLabel: string,
+): string {
+  if (!limit.window_minutes) {
+    return fallbackLabel
+  }
+
+  if (limit.window_minutes < 60 * 24) {
+    const hours = Math.max(1, Math.round(limit.window_minutes / 60))
+    return `${hours}h`
+  }
+
+  const days = Math.max(1, Math.round(limit.window_minutes / (60 * 24)))
+  return `${days}d`
 }
 
 /**

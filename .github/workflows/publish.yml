@@ -1,0 +1,71 @@
+name: Publish Extension
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish to the VS Code Marketplace
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "20"
+
+concurrency:
+  group: marketplace-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Build, Test, Publish
+    runs-on: ubuntu-latest
+    environment: marketplace
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm test
+
+      - name: Package extension
+        run: npm run vscode:package
+
+      - name: Upload VSIX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: codex-stats-updated-vsix
+          path: '*.vsix'
+          if-no-files-found: error
+
+      - name: Publish to Marketplace
+        if: github.event_name == 'push' || github.event_name == 'release' || inputs.publish == true
+        run: npx vsce publish --packagePath ./*.vsix --skip-duplicate
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}

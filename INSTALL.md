@@ -5,7 +5,7 @@
 1. **Install dependencies:**
 
    ```bash
-   cd codex-usage
+   cd codex-stats
    npm install
    ```
 
@@ -16,7 +16,7 @@
    ```
 
 3. **Test in VS Code:**
-   - Open the `codex-usage` folder in VS Code
+   - Open the `codex-stats` folder in VS Code
    - Press `F5` to launch a new VS Code window with the extension loaded
    - You should see the Codex Stats indicator in the status bar (bottom right)
 
@@ -25,24 +25,24 @@
 1. **Install vsce (Visual Studio Code Extension manager):**
 
    ```bash
-   npm install -g vsce
+   npm install -g @vscode/vsce
    ```
 
 2. **Package the extension:**
 
    ```bash
-   cd codex-usage
-   vsce package
+   cd codex-stats
+   npm run vscode:package
    ```
 
-   This will create a `codex-usage-1.0.0.vsix` file
+   This will create a `codex-stats-updated-1.0.4.vsix` file
 
 3. **Install the extension in VS Code:**
    - Open VS Code
    - Go to Extensions view (`Cmd+Shift+X` or `Ctrl+Shift+X`)
    - Click on the `...` menu at the top of the Extensions view
    - Select "Install from VSIX..."
-   - Select the `codex-usage-1.0.0.vsix` file
+   - Select the `codex-stats-updated-1.0.4.vsix` file
 
 ## First Time Setup
 

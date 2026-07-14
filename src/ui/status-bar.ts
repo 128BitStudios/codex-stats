@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import { RateLimits, AuthData } from '../types'
+import { RateLimits, AuthData, RateLimitWindow } from '../types'
 import {
   createMainTooltip,
   createAuthRequiredTooltip,
@@ -36,7 +36,6 @@ export function updateStatusBar(rateLimits: RateLimits, authData: AuthData) {
   // Determine usage percentages
   let primaryPercent = 0
   let secondaryPercent = 0
-  let statusColor = 'charts.green'
 
   if (rateLimits.primary) {
     primaryPercent = rateLimits.primary.used_percent
@@ -46,8 +45,11 @@ export function updateStatusBar(rateLimits: RateLimits, authData: AuthData) {
     secondaryPercent = rateLimits.secondary.used_percent
   }
 
+  const displayLimit = getDisplayLimit(rateLimits)
+  const displayPercent = displayLimit?.used_percent ?? 0
+
   // Update status bar text with custom icon - no colors
-  statusBarItem.text = `$(codex-blossom) ${primaryPercent.toFixed(0)}%`
+  statusBarItem.text = `$(codex-blossom) ${displayPercent.toFixed(0)}%`
   statusBarItem.color = undefined
   statusBarItem.backgroundColor = undefined
 
@@ -58,6 +60,16 @@ export function updateStatusBar(rateLimits: RateLimits, authData: AuthData) {
     primaryPercent,
     secondaryPercent,
   )
+}
+
+function getDisplayLimit(rateLimits: RateLimits): RateLimitWindow | undefined {
+  if (rateLimits.primary && rateLimits.secondary) {
+    return rateLimits.primary.used_percent >= rateLimits.secondary.used_percent
+      ? rateLimits.primary
+      : rateLimits.secondary
+  }
+
+  return rateLimits.primary ?? rateLimits.secondary
 }
 
 /**

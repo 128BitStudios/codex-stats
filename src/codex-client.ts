@@ -1,12 +1,12 @@
-import axios, { AxiosInstance } from 'axios'
+import axios from 'axios'
 import * as fs from 'fs'
 import * as os from 'os'
 import * as path from 'path'
-import { AuthData, RateLimits, RateLimitWindow } from './types'
+import { AuthData, RateLimits } from './types'
 
 export class CodexAPIClient {
   private authData: AuthData
-  private baseUrl: string = 'https://chatgpt.com/backend-api'
+  private baseUrl = 'https://chatgpt.com/backend-api'
   private lastRateLimits: RateLimits | null = null
   private model: string
 
@@ -76,7 +76,7 @@ export class CodexAPIClient {
       session_id: sessionId,
       Accept: 'text/event-stream',
       originator: 'codex_vscode_extension',
-      'User-Agent': 'codex-usage-vscode/1.0.0',
+      'User-Agent': 'codex-stats-vscode/1.0.4',
       Authorization: `Bearer ${this.authData.accessToken}`,
       'Content-Type': 'application/json',
       'Cache-Control': 'no-cache',
@@ -154,7 +154,7 @@ export class CodexAPIClient {
 
     const rateLimits: RateLimits = {}
 
-    // Parse primary window (5h limit)
+    // Parse primary window when Codex returns one
     const primaryUsedPercent = this.parseHeaderFloat(
       headers,
       'x-codex-primary-used-percent',

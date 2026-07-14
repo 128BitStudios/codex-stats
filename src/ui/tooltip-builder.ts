@@ -31,6 +31,12 @@ export function createMainTooltip(
   // Usage Limits section with better visual hierarchy
   tooltip.appendMarkdown(`### 🚀 Rate Limits\n\n`)
 
+  if (!rateLimits.primary && rateLimits.secondary) {
+    tooltip.appendMarkdown(
+      `> ℹ️ Short-window limits are not currently being returned by Codex. Showing available limits only.\n\n`,
+    )
+  }
+
   if (rateLimits.primary) {
     const windowHours = rateLimits.primary.window_minutes
       ? Math.floor(rateLimits.primary.window_minutes / 60)

@@ -4,3 +4,8 @@ node_modules
 .vscode-test/
 *.vsix
 .DS_Store
+
+# Local sensitive files detected by git-worktree-organizer
+!.env.example
+.env.local
+.env.prod
